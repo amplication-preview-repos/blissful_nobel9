@@ -1,0 +1,100 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Sale {
+  client    Client?   @relation(fields: [clientId], references: [id])
+  clientId  String?
+  createdAt DateTime  @default(now())
+  date      DateTime?
+  id        String    @id @default(cuid())
+  product   Product?  @relation(fields: [productId], references: [id])
+  productId String?
+  quantity  Int?
+  updatedAt DateTime  @updatedAt
+}
+
+model Client {
+  appointments Appointment[]
+  createdAt    DateTime      @default(now())
+  email        String?
+  firstName    String?
+  id           String        @id @default(cuid())
+  lastName     String?
+  phoneNumber  String?
+  sales        Sale[]
+  updatedAt    DateTime      @updatedAt
+}
+
+model Quotation {
+  createdAt   DateTime   @default(now())
+  id          String     @id @default(cuid())
+  piRecords   PiRecord[]
+  product     Product?   @relation(fields: [productId], references: [id])
+  productId   String?
+  quantity    Int?
+  quotedPrice Float?
+  updatedAt   DateTime   @updatedAt
+  validUntil  DateTime?
+}
+
+model PiRecord {
+  createdAt   DateTime   @default(now())
+  date        DateTime?
+  id          String     @id @default(cuid())
+  issuedBy    String?
+  quotation   Quotation? @relation(fields: [quotationId], references: [id])
+  quotationId String?
+  updatedAt   DateTime   @updatedAt
+}
+
+model Appointment {
+  client    Client?   @relation(fields: [clientId], references: [id])
+  clientId  String?
+  createdAt DateTime  @default(now())
+  date      DateTime?
+  details   String?
+  id        String    @id @default(cuid())
+  updatedAt DateTime  @updatedAt
+}
+
+model Purchase {
+  createdAt DateTime  @default(now())
+  date      DateTime?
+  id        String    @id @default(cuid())
+  product   Product?  @relation(fields: [productId], references: [id])
+  productId String?
+  quantity  Int?
+  supplier  String?
+  updatedAt DateTime  @updatedAt
+}
+
+model Lead {
+  createdAt DateTime        @default(now())
+  email     String?
+  id        String          @id @default(cuid())
+  name      String?
+  status    EnumLeadStatus?
+  updatedAt DateTime        @updatedAt
+}
+
+model Product {
+  createdAt   DateTime    @default(now())
+  description String?
+  id          String      @id @default(cuid())
+  name        String?
+  price       Float?
+  purchases   Purchase[]
+  quotations  Quotation[]
+  sales       Sale[]
+  updatedAt   DateTime    @updatedAt
+}
+
+enum EnumLeadStatus {
+  Option1
+}
