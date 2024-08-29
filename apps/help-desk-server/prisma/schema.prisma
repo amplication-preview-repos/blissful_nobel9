@@ -1,0 +1,41 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Resource {
+  addedAt   DateTime?
+  createdAt DateTime  @default(now())
+  id        String    @id @default(cuid())
+  name      String?
+  typeField String?
+  updatedAt DateTime  @updatedAt
+  url       String?
+}
+
+model Faq {
+  answer    String?
+  category  String?
+  createdAt DateTime @default(now())
+  id        String   @id @default(cuid())
+  question  String?
+  updatedAt DateTime @updatedAt
+}
+
+model SupportTicket {
+  assignedTo  String?
+  createdAt   DateTime                 @default(now())
+  description String?
+  id          String                   @id @default(cuid())
+  status      EnumSupportTicketStatus?
+  title       String?
+  updatedAt   DateTime                 @updatedAt
+}
+
+enum EnumSupportTicketStatus {
+  Option1
+}
