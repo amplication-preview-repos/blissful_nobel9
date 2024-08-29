@@ -1,0 +1,26 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Hierarchy {
+  createdAt  DateTime @default(now())
+  employee   String?
+  id         String   @id @default(cuid())
+  level      Int?
+  supervisor String?
+  updatedAt  DateTime @updatedAt
+}
+
+model Department {
+  createdAt        DateTime @default(now())
+  description      String?
+  id               String   @id @default(cuid())
+  name             String?
+  parentDepartment String?
+  updatedAt        DateTime @updatedAt
+}
