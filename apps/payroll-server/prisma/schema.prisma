@@ -1,0 +1,38 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model EmployeeSalary {
+  amount         Float?
+  createdAt      DateTime        @default(now())
+  date           DateTime?
+  employee       String?
+  id             String          @id @default(cuid())
+  payrollRecords PayrollRecord[]
+  updatedAt      DateTime        @updatedAt
+}
+
+model PayrollRecord {
+  createdAt        DateTime        @default(now())
+  date             DateTime?
+  employeeSalary   EmployeeSalary? @relation(fields: [employeeSalaryId], references: [id])
+  employeeSalaryId String?
+  id               String          @id @default(cuid())
+  paySlips         PaySlip[]
+  updatedAt        DateTime        @updatedAt
+}
+
+model PaySlip {
+  createdAt       DateTime       @default(now())
+  employee        String?
+  id              String         @id @default(cuid())
+  issuedAt        DateTime?
+  payrollRecord   PayrollRecord? @relation(fields: [payrollRecordId], references: [id])
+  payrollRecordId String?
+  updatedAt       DateTime       @updatedAt
+}
