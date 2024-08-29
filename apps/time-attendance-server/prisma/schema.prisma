@@ -1,0 +1,31 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model AttendanceRecord {
+  createdAt DateTime                    @default(now())
+  date      DateTime?
+  employee  String?
+  id        String                      @id @default(cuid())
+  status    EnumAttendanceRecordStatus?
+  updatedAt DateTime                    @updatedAt
+}
+
+model Shift {
+  createdAt   DateTime  @default(now())
+  description String?
+  endTime     DateTime?
+  id          String    @id @default(cuid())
+  name        String?
+  startTime   DateTime?
+  updatedAt   DateTime  @updatedAt
+}
+
+enum EnumAttendanceRecordStatus {
+  Option1
+}
